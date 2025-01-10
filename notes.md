@@ -15,3 +15,5 @@ Pattern for development using GitHub:
     2. Make changes to the code
     3. Commit the changes (git commit)
     4. Push the changes to GitHub (git push)
+
+Make sure to save changes in VS code before trying to commit and push them to GitHub
