@@ -19,10 +19,10 @@ A brief description of the application here. Lorem ipsum dolor sit amet, consect
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
 - [x] Proper use of Markdown
-- [ ] A concise and compelling elevator pitch
-- [ ] Description of key features
-- [ ] Description of how you will use each technology
-- [ ] One or more rough sketches of your application. Images must be embedded in this file using Markdown image references.
+- [x] A concise and compelling elevator pitch
+- [x] Description of key features
+- [x] Description of how you will use each technology
+- [x] One or more rough sketches of your application. Images must be embedded in this file using Markdown image references.
 
 ### Elevator pitch
 
@@ -36,32 +36,25 @@ Whether it's to gain, lose, or maintain weight a lot of us, myself included, tra
 <img src="photos/design4.png" alt="Design image" width="300">
 <img src="photos/design5.png" alt="Design image" width="300">
 
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
-```mermaid
-sequenceDiagram
-    actor You
-    actor Website
-    You->>Website: Replace this with your design
-```
-
 ### Key features
 
-- Describe your key feature
-- Describe your key feature
-- Describe your key feature
+- Daily calorie log
+- Weekly progress tracking 
+- Food database integration (Food API)
+- User authentication
+- A database that stores user info
+- Realtime updates when goals are met and fod is logged
 
 ### Technologies
 
 I am going to use the required technologies in the following ways.
 
-- **HTML** - Description here
-- **CSS** - Description here
-- **React** - Description here
-- **Service** - Description here
-- **DB/Login** - Description here
-- **WebSocket** - Description here
+- **HTML** - Structure for a signup/login page, a home page, daily log page, and progress page.
+- **CSS** - Style for different screen sizes, style buttons and potentially add animations when switching pages or logging meals.
+- **React** - Use for login, daily meal log, meal logging form, and progress graph.
+- **Service** - Use a food API with data on food and colorie information.
+- **DB/Login** - Register and login the user, store user data (meals logged, calorie totals).
+- **WebSocket** - Notify user in real time when a meal is logged or the calorie goal is met.
 
 ## 🚀 AWS deliverable
 
