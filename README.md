@@ -30,11 +30,12 @@ Whether it's to gain, lose, or maintain weight a lot of us, myself included, tra
 
 ### Design
 
-![Design image](photos/design1.png)
-![Design image](photos/design2.png)
-![Design image](photos/design3.png)
-![Design image](photos/design4.png)
-![Design image](photos/design5.png)
+<img src="photos/design1.png" alt="Design image" width="300">
+<img src="photos/design2.png" alt="Design image" width="300">
+<img src="photos/design3.png" alt="Design image" width="300">
+<img src="photos/design4.png" alt="Design image" width="300">
+<img src="photos/design5.png" alt="Design image" width="300">
+
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
