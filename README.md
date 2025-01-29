@@ -69,7 +69,7 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 - [x] **Proper HTML element usage** - I employed proper usage of Head, Header, Body, Main, Footer, Div, etc. elements.
 - [x] **Links** - I included links to navigate between each of the pages.
 - [x] **Text** - I added text when necessary both as placeholders for database elements and general headings and subheadings for the final webpage.
-- [ ] **3rd party API placeholder** - I did not complete this part of the deliverable.
+- [x] **3rd party API placeholder** - I included a search bar titled "Search Food" that will connect to a food database API to allow users to search for nutrition information for different foods. 
 - [ ] **Images** - I did not complete this part of the deliverable.
 - [x] **Login placeholder** - I included a login placeholder.
 - [x] **DB data placeholder** - I included database placeholder text.
