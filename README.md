@@ -72,8 +72,8 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 - [x] **3rd party API placeholder** - I included a search bar titled "Search Food" that will connect to a food database API to allow users to search for nutrition information for different foods. 
 - [x] **Images** - I added images.
 - [x] **Login placeholder** - I included a login placeholder.
-- [x] **DB data placeholder** - I included database placeholder text.
-- [x] **WebSocket placeholder** - I added a placeholder for the websocket notifications.
+- [x] **DB data placeholder** - I included database placeholder text on the "Daily Log" page.
+- [x] **WebSocket placeholder** - I added a placeholder for the websocket notifications on the "Tracker" page.
 
 ## 🚀 CSS deliverable
 
