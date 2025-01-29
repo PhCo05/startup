@@ -73,7 +73,7 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 - [ ] **Images** - I did not complete this part of the deliverable.
 - [x] **Login placeholder** - I included a login placeholder.
 - [x] **DB data placeholder** - I included database placeholder text.
-- [x] **WebSocket placeholder** - I did not complete this part of the deliverable.
+- [x] **WebSocket placeholder** - I added a placeholder for the websocket notifications.
 
 ## 🚀 CSS deliverable
 
