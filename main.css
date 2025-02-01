@@ -1,0 +1,23 @@
+* {
+    font-family: sans-serif;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-width: 375px;
+}
+
+header {
+    flex: 0, 80px;
+}
+
+menu {
+    display: flex;
+    flex-direction: row;
+    list-style: none;
+}
+
+menu .nav-item {
+    padding: 0.3em;
+}
