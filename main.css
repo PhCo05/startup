@@ -1,28 +1,35 @@
-* {
-    font-family: sans-serif;
-}
-
 body {
     display: flex;
     flex-direction: column;
     min-width: 375px;
 }
 
+header {
+    color: white;
+    background: hsl(223, 57%, 38%);
+    display: flex;
+    flex: 0 80px;
+    padding-left: 0.7em;
+    align-items: center;
+}
+
 main {
+    flex: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-around;
+    justify-content: center;
 }
 
-header {
-    flex: 0, 80px;
+footer {
+    display: flex;
+    flex: 0 30px;
 }
 
 menu {
     flex: 1;
     display: flex;
-    flex-direction: row;
+    flex-direction: row !important;
     list-style: none;
 }
 
