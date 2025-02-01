@@ -2,6 +2,7 @@ body {
     display: flex;
     flex-direction: column;
     min-width: 375px;
+    min-height: 100vh;
 }
 
 header {
@@ -24,6 +25,9 @@ main {
 footer {
     display: flex;
     flex: 0 30px;
+    align-items: center;
+    background-color: hsl(223, 57%, 38%);
+    color: white;
 }
 
 menu {
@@ -35,4 +39,13 @@ menu {
 
 menu .nav-item {
     padding: 0 0.3em;
+}
+
+menu .nav-item a {
+    color: white;
+    text-decoration: none;
+}
+
+menu .nav-item a:hover {
+    color: hsl(180, 1%, 55%);
 }
