@@ -36,9 +36,18 @@ main h1 {
 footer {
     display: flex;
     flex: 0 30px;
-    align-items: center;
     background-color: hsl(223, 57%, 38%);
     color: white;
+}
+
+footer a {
+    float: right;
+    text-decoration: none;
+    color: white;
+}
+
+footer a:hover {
+    color: hsl(180, 1%, 55%);
 }
 
 menu {
