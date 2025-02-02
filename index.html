@@ -12,7 +12,7 @@
     crossorigin="anonymous"
   />
     </head>
-    <body>
+    <body id="home">
         <header>
             <h1>Calorie Tracker</h1>
             
@@ -29,21 +29,21 @@
             <hr />
         </header>
 
-        <main>
+        <main class="container-fluid text-center">
             <!-- User Authentication -->
             <h1>Sign up to start your fitness journey</h1>
             <form method="get" action="tracker.html">
-                <div class="form-group">
-                  <span>Email address</span>
+                <div class="input-group mb-3">
+                  <span class="input-group-text">&#9993;</span>
                   <input type="email" class="form-control" placeholder="Enter email" />
                 </div>
-                <div class="password">
-                  <span>Password</span>
+                <div class="input-group mb-3">
+                  <span class="input-group-text">&#128274;</span>
                   <input type="password" class="form-control" placeholder="Password" />
                 </div>
                 <button type="submit" class="btn btn-primary">Login</button>
-                <button type="submit" class="btn btn-secondary">Create</button>
-              </form>
+                <button type="submit" class="btn btn-light">Create</button>
+            </form>
         </main>
 
         <footer>
