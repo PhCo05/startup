@@ -18,7 +18,7 @@ body {
 
 header {
     color: white;
-    background: linear-gradient(to right, #4881b1, #355579);
+    background: linear-gradient(to right, #1980d4, #033875);
     display: flex;
     flex: 0 60px;
     padding-left: 2em;
@@ -41,7 +41,7 @@ main h1 {
 footer {
     display: flex;
     flex: 0 30px;
-    background: linear-gradient(to right, #4881b1, #355579);
+    background: linear-gradient(to right, #1980d4, #033875);
     color: white;
 }
 
