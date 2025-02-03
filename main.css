@@ -1,4 +1,8 @@
-body {
+* {
+    font-family: 'Poppins', sans-serif;
+}
+
+body { 
     display: flex;
     flex-direction: column;
     min-width: 375px;
@@ -14,11 +18,12 @@ body {
 
 header {
     color: white;
-    background: hsl(223, 57%, 38%);
+    background: linear-gradient(to right, #4881b1, #355579);
     display: flex;
-    flex: 0 80px;
-    padding-left: 0.7em;
+    flex: 0 56px;
+    padding-left: 2em;
     align-items: center;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
 }
 
 main {
@@ -36,9 +41,10 @@ main h1 {
 footer {
     display: flex;
     flex: 0 30px;
-    background-color: hsl(223, 57%, 38%);
+    background: linear-gradient(to right, #4881b1, #355579);
     color: white;
 }
+
 
 footer a {
     float: right;
