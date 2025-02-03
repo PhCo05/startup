@@ -1,9 +1,9 @@
 main {
     display: flex;
     flex-direction: column;
+    
 }
 
-li {
-    text-decoration: none;
-    
+ul {
+    list-style-type: none;
 }
