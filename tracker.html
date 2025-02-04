@@ -34,10 +34,10 @@
             <!-- Websocket notifications -->
              <section id="notifications">
                 <ul>
-                    <li>Isaac added calories!<span>&#x1F4AA;</span></li>
-                    <li>Isaac reached his calorie goal!<span>&#x1F525;</span></li>
-                    <li>You added calories!<span>&#x1F4AA;</span></li>
-                    <li>You reached your calorie goal!<span>&#x1F525;</span></li>
+                    <li><span class="player-name">Isaac</span> added calories!<span>&#x1F4AA;</span></li>
+                    <li><span class="player-name">Isaac</span> reached his calorie goal!<span>&#x1F525;</span></li>
+                    <li><span class="player-name">You</span> added calories!<span>&#x1F4AA;</span></li>
+                    <li><span class="player-name">You</span> reached your calorie goal!<span>&#x1F525;</span></li>
                  </ul>
              </section>
             <!-- Total Calories Display -->
@@ -47,14 +47,25 @@
            </section>
 
            <!-- Input Section -->
-            <section id="calorie-input">
-                <h2>Add Calories</h2>
-                <form id="calorie-form">
-                    <label for="calorie-amount">Calories:</label>
-                    <input type="number" id="calorie-amount" name="calorie-amount" min="0" required>
-                    <button type="submit">Add</button>
+           <div class="container">
+            <div class="calories-form shadow-sm">
+                <h4 class="text-center mb-3">Add Calories</h4>
+                <form>
+                    <div class="mb-3">
+                        <label for="foodName" class="form-label">Food Name</label>
+                        <input type="text" class="form-control" id="foodName" placeholder="e.g., Chicken Salad">
+                    </div>
+                    <div class="mb-3">
+                        <label for="calories" class="form-label">Calories</label>
+                        <input type="number" class="form-control" id="calories" placeholder="e.g., 350">
+                    </div>
+                    <div class="mb-3">
+                        <label for="date" class="form-label">Date</label>
+                        <input type="date" class="form-control" id="date">
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Add Entry</button>
                 </form>
-            </section>
+            </div>
 
             <!-- Food search section -->
              <section id="food-search">

@@ -1,9 +1,16 @@
-main {
-    display: flex;
-    flex-direction: column;
-    
-}
-
 ul {
     list-style-type: none;
+}
+
+#notifications {
+    width: 100%;
+    padding: 1em;
+}
+
+.player-name {
+    color: rgb(80, 186, 235);
+}
+
+#food-search {
+    flex: 1;
 }
