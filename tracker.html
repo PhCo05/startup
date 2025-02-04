@@ -45,10 +45,19 @@
              </section>
 
             <!-- Total Calories Display -->
-           <section id="calorie-display">
+           <!-- <section id="calorie-display">
             <h2>Total Calories</h2>
             <p id="total-calories">0</p>
-           </section>
+           </section> -->
+
+            <div class="container mt-4">
+                <h4>Total Calories: <span>1500</span></h4>
+                <div class="progress" style="height: 25px;">
+                    <div class="progress-bar bg-primary" role="progressbar" style="width: 75%;" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
+                        75%
+                    </div>
+                </div>
+            </div>
 
             <!-- Buttons for modals -->
             <div class="container text-center mt-5">
@@ -98,11 +107,12 @@
         </div>
 
             <!-- Food search section -->
-             <section id="food-search">
-                <h2>Search Food</h2>
-                <input type="text" id="food-input" placeholder="Search for a food...">
-                <button id="search-btn">Search</button>
-             </section>
+            <div class="container mt-4">
+                <form class="d-flex">
+                    <input class="form-control me-2" type="search" placeholder="Search food..." aria-label="Search">
+                    <button class="btn btn-primary" type="submit">Search</button>
+                </form>
+            </div>
         </main>
 
         <footer>
