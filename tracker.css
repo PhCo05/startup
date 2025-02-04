@@ -1,6 +1,6 @@
 main {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
 }
 
 ul {
@@ -17,6 +17,3 @@ ul {
     color: rgb(80, 186, 235);
 }
 
-#food-search {
-    flex: 1;
-}
