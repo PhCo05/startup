@@ -1,8 +1,14 @@
+main {
+    display: flex;
+    flex-direction: row;
+}
+
 ul {
     list-style-type: none;
 }
 
 #notifications {
+    height: 100%;
     width: 100%;
     padding: 1em;
 }

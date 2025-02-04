@@ -40,11 +40,26 @@
                     <li><span class="player-name">You</span> reached your calorie goal!<span>&#x1F525;</span></li>
                  </ul>
              </section>
+
             <!-- Total Calories Display -->
            <section id="calorie-display">
             <h2>Total Calories</h2>
             <p id="total-calories">0</p>
            </section>
+
+           <div class="container">
+            <!-- Set Calorie Goal -->
+            <div class="goal-form shadow-sm">
+                <h4 class="text-center mb-3">Set Your Calorie Goal</h4>
+                <form id="goalForm">
+                    <div class="mb-3">
+                        <label for="calorieGoal" class="form-label">Daily Goal</label>
+                        <input type="number" class="form-control" id="calorieGoal" placeholder="e.g., 2000">
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Set Goal</button>
+                </form>
+            </div>
+        
 
            <!-- Input Section -->
            <div class="container">
