@@ -3,6 +3,7 @@
     <head>
         <title>Calorie Tracker</title>
         <link rel="stylesheet" href="main.css">
+        <link rel="stylesheet" href="progress.css">
 
         <!-- Include bootstrap CSS framework -->
     <link
@@ -32,9 +33,10 @@
         <main>
            <!-- Graph section -->
             <section id="graph-section">
-             <h2>Weekly Progress Report</h2>
-             <img src="https://cdn5.vectorstock.com/i/1000x1000/30/54/line-chart-vector-38403054.jpg" width = 200>
-             <canvas id="calorie-graph"></canvas>
+                <div class="container mt-4">
+                    <h4>Weekly Calorie Progress</h4>
+                    <canvas id="calorieChart"></canvas>
+                </div>
             </section>
         </main>
 
