@@ -7,3 +7,7 @@ ul {
 }
 
 
+.container {
+    max-width: 500px !important;
+    width: 80% !important;
+}
