@@ -2,12 +2,6 @@ ul {
     list-style-type: none;
 }
 
-#notifications {
-    height: 100%;
-    width: 100%;
-    padding: 1em;
-}
-
 .player-name {
     color: rgb(80, 186, 235);
 }
