@@ -3,6 +3,7 @@
     <head>
         <title>Calorie Tracker</title>
         <link rel="stylesheet" href="main.css">
+        <link rel="stylesheet" href="log.css">
 
         <!-- Include bootstrap CSS framework -->
     <link
@@ -32,16 +33,21 @@
         <main>
            <!-- Log Section -->
             <section id="log-section">
-                <h2>Daily Log</h2>
-                <img src="https://static.vecteezy.com/system/resources/previews/010/747/502/large_2x/diary-icon-design-free-vector.jpg" width = 100>
-                <ul id="log-list">
-                    <li>Monday: 3,200</li>
-                    <li>Tuesday: 3,200</li>
-                    <li>Wednesday: 3,200</li>
-                    <li>Thursday: 3,200</li>
-                    <li>Friday: 3,200</li>
-                    <li>Saturday: 3,200</li>
-                    <li>Sunday: 3,200</li>
+                <h4>Daily Log - <span id="log-date">Feb 4, 2025</span></h4>
+
+                <div class="total-calories">
+                    <strong>Total Calories:</strong> <span id="daily-total">550</span> cal
+                </div>
+
+                <ul class="log-list">
+                    <li class="log-entry">
+                        <span class="food-name">Chicken Salad</span> 
+                        <span class="food-calories">350 cal</span>
+                    </li>
+                    <li class="log-entry">
+                        <span class="food-name">Oatmeal</span> 
+                        <span class="food-calories">200 cal</span>
+                    </li>
                 </ul>
 
             </section>
