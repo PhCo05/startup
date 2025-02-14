@@ -1,5 +1,5 @@
 #home {
-    background-image: url('photos/running.jpg');
+    background-image: url('/running.jpg?v=1');
     background-size: cover;
     background-position: center;
     color: white;
