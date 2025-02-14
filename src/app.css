@@ -9,13 +9,6 @@
     min-height: 100vh;
 }
 
-#home {
-    background-image: url('photos/running.jpg');
-    background-size: cover;
-    background-position: center;
-    color: white;
-}
-
 header {
     color: white;
     background: linear-gradient(to right, #1980d4, #033875);
@@ -76,6 +69,3 @@ menu .nav-item a:hover {
     color: hsl(180, 1%, 55%);
 }
 
-button {
-    align-items: center;
-}

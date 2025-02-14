@@ -1,0 +1,6 @@
+#home {
+    background-image: url('photos/running.jpg');
+    background-size: cover;
+    background-position: center;
+    color: white;
+}
