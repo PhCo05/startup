@@ -1,9 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import './authenticated.css';
 
 import Button from 'react-bootstrap/Button';
-
-import './authenticated.css';
 
 export function Authenticated(props) {
   const navigate = useNavigate();
@@ -16,12 +15,12 @@ export function Authenticated(props) {
   return (
     <div>
       <div className='userName'>{props.userName}</div>
-      <Button variant='primary' onClick={() => navigate('/play')}>
-        Track
-      </Button>
-      <Button variant='secondary' onClick={() => logout()}>
-        Logout
-      </Button>
+        <Button className='me-2' variant='primary' onClick={() => navigate('/tracker')}>
+            Track
+        </Button>
+        <Button variant='secondary' onClick={() => logout()}>
+            Logout
+        </Button>
     </div>
   );
 }

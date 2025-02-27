@@ -7,8 +7,13 @@ import { Login } from './login/login';
 import { Tracker } from './tracker/tracker';
 import { Progress } from './progress/progress';
 import { Log } from './log/log';
+import { AuthState } from './login/authState';
 
 export default function App() {
+    const [userName, setUserName] = React.useState(localStorage.getItem('userName') || '');
+    const currentAuthState = userName ? AuthState.Authenticated : AuthState.Unauthenticated;
+    const [authState, setAuthState] = React.useState(currentAuthState);
+
   return (
     <BrowserRouter>
         <div className="body bg-dark text-light">
@@ -17,16 +22,51 @@ export default function App() {
   
                 <nav>
                     <menu>
-                        <li className="nav-item"><NavLink className='nav-link active' to=" ">Home</NavLink></li>
-                        <li className="nav-item"><NavLink className='nav-link active' to="tracker">Tracker</NavLink></li>
-                        <li className="nav-item"><NavLink className='nav-link active' to="progress">Progress</NavLink></li>
-                        <li className="nav-item"><NavLink className='nav-link active' to="log">Log</NavLink></li>
+                        <li className="nav-item">
+                            <NavLink className='nav-link active' to=" ">
+                                Home
+                            </NavLink>
+                        </li>
+                        {authState === AuthState.Authenticated && (
+                            <li className="nav-item">
+                                <NavLink className='nav-link active' to="tracker">
+                                    Tracker
+                                </NavLink>
+                            </li>
+                        )}
+                        {authState === AuthState.Authenticated && (
+                            <li className="nav-item">
+                                <NavLink className='nav-link active' to="progress">
+                                    Progress
+                                </NavLink>
+                            </li>
+                        )}
+                        {authState === AuthState.Authenticated && (
+                            <li className="nav-item">
+                                <NavLink className='nav-link active' to="log">
+                                    Log
+                                </NavLink>
+                            </li>
+                        )}
                     </menu>
                 </nav>
             </header>
 
             <Routes>
-                <Route path='/' element={<Login />} exact />
+                <Route 
+                    path='/' 
+                    element={
+                        <Login 
+                            userName={userName}
+                            authState={authState}
+                            onAuthChange={(userName, authState) => {
+                                setAuthState(authState);
+                                setUserName(userName);
+                            }}
+                        />
+                    } 
+                    exact 
+                />
                 <Route path='/tracker' element={<Tracker />} />
                 <Route path='/progress' element={<Progress />} />
                 <Route path='/log' element={<Log />} />

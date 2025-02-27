@@ -1,4 +1,5 @@
 import React from 'react';
+import './login.css';
 
 import Button from 'react-bootstrap/Button';
 
@@ -27,10 +28,10 @@ export function Unauthenticated(props) {
             <span className="input-group-text">&#128274;</span>
             <input type="password" className="form-control" onChange={(e) => setPassword(e.target.value)} placeholder="Password" />
         </div>
-        <Button variant='primary' onClick={() => loginUser()} disabled={!userName || !password}>
+        <Button className="me-2" variant='primary' onClick={() => loginUser()} disabled={!userName || !password}>
             Login
         </Button>
-        <Button variant='primary' onClick={() => createUser()} disabled={!userName || !password}>
+        <Button variant='secondary' onClick={() => createUser()} disabled={!userName || !password}>
             Create
         </Button>
     </>

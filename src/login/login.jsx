@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import './login.css';
+import React from 'react';
 
 import { Authenticated } from './authenticated';
 import { Unauthenticated } from './unauthenticated';
@@ -11,7 +10,7 @@ export function Login({userName, authState, onAuthChange}) {
   return (
     <main className="container-fluid text-center" id="home">
       <div>
-        {authState !== AuthState.Unknown && <h1>Sign up to start your fitness journey</h1>}
+        {authState !== AuthState.Unknown && <h1>Welcome to CalCount</h1>}
         {authState === AuthState.Authenticated && (
           <Authenticated userName={userName} onLogout={() => onAuthChange(userName, AuthState.Unauthenticated)} />
         )}
