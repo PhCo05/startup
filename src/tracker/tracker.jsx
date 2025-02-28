@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './tracker.css';
-import { Modal, Button, Form } from 'react-bootstrap/Button';
+import { Modal, Button, Form } from 'react-bootstrap';
 
 export function Tracker() {
     const [totalCalories, setTotalCalories] = useState(0);
@@ -10,6 +10,7 @@ export function Tracker() {
     const [foodName, setFoodName] = useState('');
     const [calories, setCalories] = useState('');
     const [showCalModal, setShowCalModal] = useState(false);
+    const [showGoalModal, setShowGoalModal] = useState(false); 
 
     const handleShowCalModal = () => setShowCalModal(true);
     const handleCloseCalModal = () => setShowCalModal(false);
@@ -18,9 +19,10 @@ export function Tracker() {
     const handleCloseGoalModal = () => setShowGoalModal(false);
 
     const handleSaveGoal = () => {
-        // Logic to save the goal (you can implement this as needed)
+        // Logic to save the goal 
         console.log('Goal saved:', calorieGoal);
         handleCloseGoalModal(); // Close modal after saving the goal
+    }
 
     const handleAddEntry = () => {
         if (foodName && calories) {
@@ -84,7 +86,7 @@ export function Tracker() {
 
 
         {/* Set Goal Modal */}
-        <Modal show={showGoalModal} onHide={handleCloseGoalModal}>
+        <Modal show={showGoalModal} onHide={handleCloseGoalModal} data-bs-theme="dark">
             <Modal.Header closeButton>
                 <Modal.Title>Set Your Calorie Goal</Modal.Title>
             </Modal.Header>
@@ -107,7 +109,7 @@ export function Tracker() {
         </Modal>
 
         {/* Add Calories Modal */}
-        <Modal show={showCalModal} onHide={handleCloseCalModal}>
+        <Modal show={showCalModal} onHide={handleCloseCalModal} data-bs-theme='dark'>
             <Modal.Header closeButton>
                 <Modal.Title>Add Calories</Modal.Title>
             </Modal.Header>
@@ -124,9 +126,6 @@ export function Tracker() {
                 </Form>
             </Modal.Body>
             <Modal.Footer>
-                <Button variant="secondary" onClick={handleCloseCalModal}>
-                    Close
-                </Button>
                 <Button variant="primary" onClick={handleAddEntry}>
                     Add Entry
                 </Button>
@@ -134,5 +133,4 @@ export function Tracker() {
         </Modal>
     </main>
   );
-}
 }
