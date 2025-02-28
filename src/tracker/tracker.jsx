@@ -40,20 +40,29 @@ export function Tracker() {
 
     const handleAddEntry = () => {
         if (foodName && calories) {
-            const calorieInt = parseInt(calories, 10);
-            if (!isNaN(calorieInt)) {
-                const newTotalCalories = totalCalories + calorieInt;
-                setTotalCalories(newTotalCalories);
-                // Update total calories in local storage
-                localStorage.setItem('totalCalories', newTotalCalories);
-                handleCloseCalModal();
-            } else {
-                alert('Please enter a valid number for calories.');
-            }
+          const calorieInt = parseInt(calories, 10);
+          if (!isNaN(calorieInt)) {
+            const newEntry = { foodName, calories: calorieInt };
+    
+            // Get existing food entries from localStorage
+            const existingEntries = JSON.parse(localStorage.getItem('foodEntries')) || [];
+            const updatedEntries = [...existingEntries, newEntry];
+    
+            // Save the updated entries back to localStorage
+            localStorage.setItem('foodEntries', JSON.stringify(updatedEntries));
+    
+            // Update total calories
+            const newTotalCalories = totalCalories + calorieInt;
+            setTotalCalories(newTotalCalories);
+            localStorage.setItem('totalCalories', newTotalCalories);
+            handleCloseCalModal();
+          } else {
+            alert('Please enter a valid number for calories.');
+          }
         } else {
-            alert('Please fill in both fields.');
+          alert('Please fill in both fields.');
         }
-    };
+      };
 
     useEffect(() => {
         const newProgress = Math.min((totalCalories / calorieGoal) * 100, 100);
