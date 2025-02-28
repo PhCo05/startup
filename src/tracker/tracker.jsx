@@ -66,7 +66,7 @@ export function Tracker() {
 
     useEffect(() => {
         const newProgress = Math.min((totalCalories / calorieGoal) * 100, 100);
-        setProgress(newProgress);
+        setProgress(Math.round(newProgress));
     }, [totalCalories, calorieGoal]);
 
     useEffect(() => {
@@ -97,7 +97,7 @@ export function Tracker() {
             <h4>Calories logged: <span>{totalCalories}</span><span id="goal-display">Calorie Goal: <span>{calorieGoal}</span></span></h4>
             <div className="progress" style={{ height: '25px' }}>
                 <div className="progress-bar bg-primary" role="progressbar" style={{ width: `${progress}%` }} aria-valuenow={progress} aria-valuemin="0" aria-valuemax="100">
-                    {progress.toFixed(2)}
+                    {progress}%
                 </div>
             </div>
         </div>
