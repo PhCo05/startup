@@ -15,3 +15,7 @@ ul {
 .modal {
     color: white;
 }
+
+#goal-display {
+    padding-left: 1em;
+}

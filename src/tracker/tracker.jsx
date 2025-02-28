@@ -3,8 +3,11 @@ import './tracker.css';
 import { Modal, Button, Form } from 'react-bootstrap';
 
 export function Tracker() {
-    const [totalCalories, setTotalCalories] = useState(0);
-    const [calorieGoal, setCalorieGoal] = useState(2000); // Example daily calorie goal
+    const initialCalorieGoal = parseInt(localStorage.getItem('calorieGoal') || 2000);
+    const initialTotalCalories = parseInt(localStorage.getItem('totalCalories') || 0);
+
+    const [totalCalories, setTotalCalories] = useState(initialTotalCalories);
+    const [calorieGoal, setCalorieGoal] = useState(initialCalorieGoal); 
     const [progress, setProgress] = useState(0);
 
     const [foodName, setFoodName] = useState('');
@@ -18,9 +21,20 @@ export function Tracker() {
     const handleShowGoalModal = () => setShowGoalModal(true);
     const handleCloseGoalModal = () => setShowGoalModal(false);
 
+    const lastUpdated = localStorage.getItem("lastUpdated");
+    const [msg, setMsg] = useState('...listening')
+
+    const today = new Date().toDateString();
+    if (lastUpdated !== today) {
+      setTotalCalories(0); // Reset calories
+      localStorage.setItem("totalCalories", "0");
+      localStorage.setItem("lastUpdated", today);
+    }
+
     const handleSaveGoal = () => {
         // Logic to save the goal 
         console.log('Goal saved:', calorieGoal);
+        localStorage.setItem('calorieGoal', calorieGoal)
         handleCloseGoalModal(); // Close modal after saving the goal
     }
 
@@ -28,7 +42,10 @@ export function Tracker() {
         if (foodName && calories) {
             const calorieInt = parseInt(calories, 10);
             if (!isNaN(calorieInt)) {
-                setTotalCalories(prevCalories => prevCalories + calorieInt);
+                const newTotalCalories = totalCalories + calorieInt;
+                setTotalCalories(newTotalCalories);
+                // Update total calories in local storage
+                localStorage.setItem('totalCalories', newTotalCalories);
                 handleCloseCalModal();
             } else {
                 alert('Please enter a valid number for calories.');
@@ -43,17 +60,20 @@ export function Tracker() {
         setProgress(newProgress);
     }, [totalCalories, calorieGoal]);
 
+    useEffect(() => {
+        setInterval(() => {
+            const names = ['Zach', 'Chris', 'Dave'];
+            const msgs = ['added calories', 'reached goal']
+            const randomName = names[Math.floor(Math.random() * names.length)];
+            const randomMsg = msgs[Math.floor(Math.random() * msgs.length)];
+            const newMsg = `${randomName} ${randomMsg}`;
+            setMsg(newMsg);
+        }, 5000)
+    })
+
   return (
     <main>
-        {/* Notifications */}
-        <section id="notifications">
-            <ul>
-                <li><span className="player-name">Isaac</span> added calories!<span>&#x1F4AA;</span></li>
-                <li><span className="player-name">Isaac</span> reached his calorie goal!<span>&#x1F525;</span></li>
-                <li><span className="player-name">You</span> added calories!<span>&#x1F4AA;</span></li>
-                <li><span className="player-name">You</span> reached your calorie goal!<span>&#x1F525;</span></li>
-            </ul>
-        </section>
+        <div>{msg}</div>
 
         {/* Food search section */}
         <div className="container mt-4">
@@ -65,10 +85,10 @@ export function Tracker() {
 
         {/* Total Calories Display */}
         <div className="container mt-4">
-            <h4>Total Calories: <span>{totalCalories}</span></h4>
+            <h4>Calories logged: <span>{totalCalories}</span><span id="goal-display">Calorie Goal: <span>{calorieGoal}</span></span></h4>
             <div className="progress" style={{ height: '25px' }}>
                 <div className="progress-bar bg-primary" role="progressbar" style={{ width: `${progress}%` }} aria-valuenow={progress} aria-valuemin="0" aria-valuemax="100">
-                    {progress.toFixed(2)}%
+                    {progress.toFixed(2)}
                 </div>
             </div>
         </div>
