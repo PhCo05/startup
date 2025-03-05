@@ -85,13 +85,8 @@ export function Tracker() {
         <div>{msg}</div>
 
         {/* Food search section */}
-        <div className="container mt-4">
-            <form className="d-flex">
-                <input className="form-control me-2" type="search" placeholder="Search food" aria-label="Search" />
-                <button className="btn btn-primary" type="submit">Search</button>
-            </form>
-        </div>
-
+        <FoodSearch />
+        
         {/* Total Calories Display */}
         <div className="container mt-4">
             <h4>Calories logged: <span>{totalCalories}</span><span id="goal-display">Calorie Goal: <span>{calorieGoal}</span></span></h4>
@@ -163,3 +158,69 @@ export function Tracker() {
     </main>
   );
 }
+
+const FoodSearch = () => {
+    const [query, setQuery] = useState("");
+    const [results, setResults] = useState([]);
+    const API_KEY = "UgvW5K4rl37ygatl7f3AZ8MjiEkbJMxl9qhGJca4";
+    const API_URL = "https://api.nal.usda.gov/fdc/v1/foods/search";
+  
+    const fetchFood = async () => {
+        if (!query.trim()) {
+            setResults([]); // Clear results if query is empty
+            return;
+          }
+
+      try {
+        const response = await fetch(`${API_URL}?query=${query}&api_key=${API_KEY}`);
+        const data = await response.json();
+        setResults(data.foods || []);
+      } catch (error) {
+        console.error("Error fetching food data:", error);
+      }
+    };
+  
+    const handleSubmit = (e) => {
+      e.preventDefault();
+      if (query.trim() !== "") {
+        fetchFood();
+        } else {
+            setResults([]); // Clear results if input is empty
+        }
+    };
+
+    useEffect(() => {
+        if (!query.trim()) {
+          setResults([]);
+        }
+      }, [query]);
+  
+    return (
+      <div className="container mt-4">
+        <form className="d-flex" onSubmit={handleSubmit}>
+          <input
+            className="form-control me-2"
+            type="search"
+            placeholder="Search food"
+            aria-label="Search"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+          />
+          <button className="btn btn-primary" type="submit">
+            Search
+          </button>
+        </form>
+  
+        {/* Display results */}
+        <ul className="list-group mt-3">
+          {results.map((food) => (
+            <li key={food.fdcId} className="list-group-item">
+              {food.description} - {food.foodNutrients?.[3]?.value || 0} kcal
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
+  };
+
+  export default FoodSearch;
