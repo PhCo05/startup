@@ -1,6 +1,6 @@
 import React from 'react';
 import './login.css';
-
+import { MessageDialogue } from './messageDialogue';
 import Button from 'react-bootstrap/Button';
 
 export function Unauthenticated(props) {
@@ -9,31 +9,61 @@ export function Unauthenticated(props) {
   const [displayError, setDisplayError] = React.useState(null);
 
   async function loginUser() {
-    localStorage.setItem('userName', userName);
-    props.onLogin(userName);
+    loginOrCreate(`/api/auth/login`);
   }
 
   async function createUser() {
-    localStorage.setItem('userName', userName);
-    props.onLogin(userName);
+    loginOrCreate(`/api/auth/create`);
+  }
+
+  async function loginOrCreate(endpoint) {
+    const response = await fetch(endpoint, {
+      method: 'post',
+      body: JSON.stringify({ email: userName, password: password }),
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+      },
+    });
+    if (response?.status === 200) {
+      localStorage.setItem('userName', userName);
+      props.onLogin(userName);
+    } else {
+      const body = await response.json();
+      setDisplayError(`⚠ Error: ${body.msg}`);
+    }
   }
 
   return (
     <>
+      <div>
         <div className="input-group mb-3">
-            <span className="input-group-text">&#9993;</span>
-            <input type="email" className="form-control" value={userName} onChange={(e) => setUserName(e.target.value)} placeholder="Email Address" />
+          <span className="input-group-text">&#9993;</span>
+          <input
+            type="email"
+            className="form-control"
+            value={userName}
+            onChange={(e) => setUserName(e.target.value)}
+            placeholder="Email Address"
+          />
         </div>
         <div className="input-group mb-3">
-            <span className="input-group-text">&#128274;</span>
-            <input type="password" className="form-control" onChange={(e) => setPassword(e.target.value)} placeholder="Password" />
+          <span className="input-group-text">&#128274;</span>
+          <input
+            type="password"
+            className="form-control"
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Password"
+          />
         </div>
-        <Button className="me-2" variant='primary' onClick={() => loginUser()} disabled={!userName || !password}>
-            Login
+        <Button className="me-2" variant="primary" onClick={() => loginUser()} disabled={!userName || !password}>
+          Login
         </Button>
-        <Button variant='secondary' onClick={() => createUser()} disabled={!userName || !password}>
-            Create
+        <Button variant="secondary" onClick={() => createUser()} disabled={!userName || !password}>
+          Create
         </Button>
+      </div>
+
+      <MessageDialogue message={displayError} onHide={() => setDisplayError(null)} />
     </>
   );
 }
