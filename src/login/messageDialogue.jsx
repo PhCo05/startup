@@ -6,7 +6,7 @@ import Modal from 'react-bootstrap/Modal';
 export function MessageDialogue(props) {
   return (
     <Modal {...props} show={props.message} centered>
-      <Modal.Body>{props.message}</Modal.Body>
+      <Modal.Body style={{ color: 'black' }}>{props.message}</Modal.Body>
       <Modal.Footer>
         <Button onClick={props.onHide}>Close</Button>
       </Modal.Footer>
