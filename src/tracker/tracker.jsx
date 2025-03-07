@@ -162,7 +162,7 @@ export function Tracker() {
 const FoodSearch = () => {
     const [query, setQuery] = useState("");
     const [results, setResults] = useState([]);
-    const API_KEY = "UgvW5K4rl37ygatl7f3AZ8MjiEkbJMxl9qhGJca4";
+    const API_KEY = import.meta.env.VITE_USDA_API_KEY;
     const API_URL = "https://api.nal.usda.gov/fdc/v1/foods/search";
   
     const fetchFood = async () => {
@@ -178,8 +178,12 @@ const FoodSearch = () => {
       } catch (error) {
         console.error("Error fetching food data:", error);
       }
+
+        console.log('API Key:', API_KEY);
+        console.log('Request URL:', API_URL);
     };
-  
+
+
     const handleSubmit = (e) => {
       e.preventDefault();
       if (query.trim() !== "") {
@@ -215,7 +219,7 @@ const FoodSearch = () => {
         <ul className="list-group mt-3">
           {results.map((food) => (
             <li key={food.fdcId} className="list-group-item">
-              {food.description} - {food.foodNutrients?.[3]?.value || 0} kcal
+              {food.description} - {food.foodNutrients?.[3]?.value || 0} cal
             </li>
           ))}
         </ul>
