@@ -9,25 +9,59 @@ ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, T
 
 
 export function Progress() {
-  const data = [
-    { date: '2025-02-01', value: 1500 },
-    { date: '2025-02-02', value: 1400 },
-    { date: '2025-02-03', value: 1600 },
-    { date: '2025-02-04', value: 1450 },
-    { date: '2025-02-05', value: 1550 }
-  ];
+  const [calorieData, setCalorieData] = useState([]);
+  const [caloriesToday, setCaloriesToday] = useState('');
+  const [error, setError] = useState(null);
+
+  // Fetch weekly calorie data on component mount
+  useEffect(() => {
+    fetch('/api/calories/week', { credentials: 'include' })
+      .then(response => response.json())
+      .then(data => setCalorieData(data))
+      .catch(error => setError('Failed to load calorie data'));
+  }, []);
+
+  // Handle daily calorie submission
+  const submitCalories = async () => {
+    if (!caloriesToday || isNaN(caloriesToday) || caloriesToday <= 0) {
+      setError('Please enter a valid calorie count');
+      return;
+    }
+
+    try {
+      const response = await fetch('/api/calories/today', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ calories: parseInt(caloriesToday, 10) })
+      });
+
+      if (!response.ok) throw new Error('Failed to log calories');
+
+      // Re-fetch weekly data to update graph
+      fetch('/api/calories/week', { credentials: 'include' })
+        .then(res => res.json())
+        .then(data => setCalorieData(data));
+
+      setCaloriesToday('');
+      setError(null);
+    } catch (error) {
+      setError('Error logging calories');
+    }
+  };
 
   const chartData = {
-    labels: data.map(item => item.date),
+    labels: calorieData.map(item => item.date),
     datasets: [
       {
-        data: data.map(item => item.value),
+        data: calorieData.map(item => item.calories),
         fill: false,
         borderColor: 'rgb(255, 255, 255)',
         tension: 0.1
       }
     ]
   };
+
 
   const chartOptions = {
     responsive: true,

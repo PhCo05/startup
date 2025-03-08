@@ -8,6 +8,7 @@ const authCookieName = 'token';
 
 // The users are saved in memory and disappear whenever the service is restarted.
 let users = [];
+let calorieData = {};
 
 // The service port. In production the front-end code is statically hosted by the service on the same port.
 const port = process.argv.length > 2 ? process.argv[2] : 3000;
@@ -70,6 +71,45 @@ const verifyAuth = async (req, res, next) => {
     res.status(401).send({ msg: 'Unauthorized' });
   }
 };
+
+// Store today's calorie total
+apiRouter.post('/calories/today', verifyAuth, (req, res) => {
+  const today = new Date().toISOString().split('T')[0]; // Format: YYYY-MM-DD
+  const { calories } = req.body;
+
+  if (!calories || typeof calories !== 'number' || calories < 0) {
+    return res.status(400).send({ msg: 'Invalid calorie value' });
+  }
+
+  if (!calorieData[req.user.email]) {
+    calorieData[req.user.email] = {};
+  }
+
+  calorieData[req.user.email][today] = calories;
+  res.json({ message: "Calories logged", data: calorieData[req.user.email] });
+});
+
+// Get the past week's calorie data
+apiRouter.get('/calories/week', verifyAuth, (req, res) => {
+  const today = new Date();
+  const email = req.user.email;
+  let userCalories = calorieData[email] || {};
+
+  let weekData = [];
+  for (let i = 6; i >= 0; i--) {
+    let day = new Date(today);
+    day.setDate(today.getDate() - i);
+    let dateStr = day.toISOString().split('T')[0];
+    weekData.push({ date: dateStr, calories: userCalories[dateStr] || 0 });
+  }
+
+  // Reset data if today is Monday
+  if (today.getDay() === 1) {
+    calorieData[email] = {};
+  }
+
+  res.json(weekData);
+});
 
 async function createUser(email, password) {
     const passwordHash = await bcrypt.hash(password, 10);
