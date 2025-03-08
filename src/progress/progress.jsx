@@ -104,9 +104,20 @@ export function Progress() {
 
   return (
     <main>
+      <section id="input-section">
+        <input
+          type="number"
+          placeholder="Enter calories"
+          value={caloriesToday}
+          onChange={e => setCaloriesToday(e.target.value)}
+        />
+        <button onClick={submitCalories}>Log Calories</button>
+        {error && <p className="error">{error}</p>}
+      </section>
+
       <section id="graph-section">
         <div className="canvas-container">
-            <Line data={chartData} options={chartOptions}/>
+          <Line data={chartData} options={chartOptions} />
         </div>
       </section>
     </main>
