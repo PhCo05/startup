@@ -105,11 +105,11 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] **Node.js/Express HTTP service** - I did not complete this part of the deliverable.
-- [ ] **Static middleware for frontend** - I did not complete this part of the deliverable.
-- [ ] **Calls to third party endpoints** - I did not complete this part of the deliverable.
-- [ ] **Backend service endpoints** - I did not complete this part of the deliverable.
-- [ ] **Frontend calls service endpoints** - I did not complete this part of the deliverable.
+- [x] **Node.js/Express HTTP service** - I used Node.js and Express.
+- [x] **Static middleware for frontend** - I added static middleware for frontend.
+- [x] **Calls to third party endpoints** - I included calls to third party endpoints.
+- [x] **Backend service endpoints** - I added backend service endpoints.
+- [x] **Frontend calls service endpoints** - My frontend calls service endpoints.
 
 ## 🚀 DB/Login deliverable
 
