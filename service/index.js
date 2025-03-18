@@ -1,17 +1,23 @@
 const cookieParser = require('cookie-parser');
 const bcrypt = require('bcrypt');
 const express = require('express');
+const cors = require('cors')
 const uuid = require('uuid');
 const app = express();
 
+require('dotenv').config(); // Load .env variables
+
 const authCookieName = 'token';
+
+app.use(cors({
+  origin: ['http://localhost:5173', 'https://startup.calorietracker.click']
+}));
 
 // The users are saved in memory and disappear whenever the service is restarted.
 let users = [];
-let calorieData = {};
 
 // The service port. In production the front-end code is statically hosted by the service on the same port.
-const port = process.argv.length > 2 ? process.argv[2] : 3000;
+const port = process.argv.length > 2 ? process.argv[2] : 4000;
 
 // JSON body parsing using built-in middleware
 app.use(express.json());
@@ -26,6 +32,20 @@ app.use(express.static('public'));
 var apiRouter = express.Router();
 app.use(`/api`, apiRouter);
 
+// Backend API
+app.get('/api/food', async (req, res) => {
+  const query = req.query.query;
+  const API_KEY = process.env.USDA_API_KEY;
+  try {
+      const response = await fetch(`https://api.nal.usda.gov/fdc/v1/foods/search?query=${query}&api_key=${API_KEY}`);
+      const data = await response.json();
+      res.json(data);
+  } catch (error) {
+      console.error("Error fetching from USDA:", error);
+      res.status(500).json({ error: "Failed to fetch food data" });
+  }
+});
+
 // CreateAuth a new user
 apiRouter.post('/auth/create', async (req, res) => {
   if (await findUser('email', req.body.email)) {
@@ -38,18 +58,16 @@ apiRouter.post('/auth/create', async (req, res) => {
   }
 });
 
-// GetAuth login an existing user
 apiRouter.post('/auth/login', async (req, res) => {
   const user = await findUser('email', req.body.email);
-  if (user) {
-    if (await bcrypt.compare(req.body.password, user.password)) {
-      user.token = uuid.v4();
-      setAuthCookie(res, user.token);
-      res.send({ email: user.email });
-      return;
-    }
+  if (user && await bcrypt.compare(req.body.password, user.password)) {
+    user.token = uuid.v4();
+    setAuthCookie(res, user.token);
+    req.user = user; // Set user object to request
+    res.send({ email: user.email });
+  } else {
+    res.status(401).send({ msg: 'Unauthorized' });
   }
-  res.status(401).send({ msg: 'Unauthorized' });
 });
 
 // DeleteAuth logout a user
@@ -71,45 +89,6 @@ const verifyAuth = async (req, res, next) => {
     res.status(401).send({ msg: 'Unauthorized' });
   }
 };
-
-// Store today's calorie total
-apiRouter.post('/calories/today', verifyAuth, (req, res) => {
-  const today = new Date().toISOString().split('T')[0]; // Format: YYYY-MM-DD
-  const { calories } = req.body;
-
-  if (!calories || typeof calories !== 'number' || calories < 0) {
-    return res.status(400).send({ msg: 'Invalid calorie value' });
-  }
-
-  if (!calorieData[req.user.email]) {
-    calorieData[req.user.email] = {};
-  }
-
-  calorieData[req.user.email][today] = calories;
-  res.json({ message: "Calories logged", data: calorieData[req.user.email] });
-});
-
-// Get the past week's calorie data
-apiRouter.get('/calories/week', verifyAuth, (req, res) => {
-  const today = new Date();
-  const email = req.user.email;
-  let userCalories = calorieData[email] || {};
-
-  let weekData = [];
-  for (let i = 6; i >= 0; i--) {
-    let day = new Date(today);
-    day.setDate(today.getDate() - i);
-    let dateStr = day.toISOString().split('T')[0];
-    weekData.push({ date: dateStr, calories: userCalories[dateStr] || 0 });
-  }
-
-  // Reset data if today is Monday
-  if (today.getDay() === 1) {
-    calorieData[email] = {};
-  }
-
-  res.json(weekData);
-});
 
 async function createUser(email, password) {
     const passwordHash = await bcrypt.hash(password, 10);
@@ -141,31 +120,4 @@ function setAuthCookie(res, authToken) {
   
 app.listen(port, () => {
     console.log(`Listening on port ${port}`);
-});
-  
-apiRouter.post('/auth/login', async (req, res) => {
-    console.log('Login request received:', req.body);  // Log incoming request data
-
-    try {
-        const user = await findUser('email', req.body.email);
-        if (!user) {
-            console.log('User not found:', req.body.email);
-            return res.status(401).send({ msg: 'Unauthorized' });
-        }
-
-        const passwordMatch = await bcrypt.compare(req.body.password, user.password);
-        if (!passwordMatch) {
-            console.log('Incorrect password for:', req.body.email);
-            return res.status(401).send({ msg: 'Unauthorized' });
-        }
-
-        user.token = uuid.v4();
-        setAuthCookie(res, user.token);
-        console.log('User authenticated:', user.email);
-        res.send({ email: user.email });
-
-    } catch (error) {
-        console.error('Error during login:', error);
-        res.status(500).send({ msg: 'Internal Server Error' });
-    }
 });
