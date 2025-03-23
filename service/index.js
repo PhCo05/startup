@@ -11,7 +11,8 @@ const DB = require('./database.js')
 const authCookieName = 'token';
 
 app.use(cors({
-  origin: ['http://localhost:5173', 'https://startup.calorietracker.click']
+  origin: ['http://localhost:5173', 'https://startup.calorietracker.click'],
+  credentials: true,
 }));
 
 
@@ -151,9 +152,9 @@ async function findUser(field, value) {
 // setAuthCookie in the HTTP response
 function setAuthCookie(res, authToken) {
     res.cookie(authCookieName, authToken, {
-      secure: true,
+      secure: false,
       httpOnly: true,
-      sameSite: 'strict',
+      sameSite: 'lax',
     });
 }
   

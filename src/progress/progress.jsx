@@ -5,26 +5,63 @@ import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
-
-
-
 export function Progress() {
-  const data = [
-    { date: '2025-02-01', value: 1500 },
-    { date: '2025-02-02', value: 1400 },
-    { date: '2025-02-03', value: 1600 },
-    { date: '2025-02-04', value: 1450 },
-    { date: '2025-02-05', value: 1550 }
-  ];
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
+  useEffect(() => {
+    async function fetchCalorieData() {
+      try {
+        const response = await fetch('http://localhost:4000/api/calories/weekly', { 
+        method: 'GET',
+        credentials: 'include' });
+        if (!response.ok) {
+          throw new Error('Failed to fetch calorie data');
+        }
+        const fetchedData = await response.json();
+
+        // Ensure data is sorted by date
+        const sortedData = fetchedData.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+        setData(sortedData);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchCalorieData();
+  }, []);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p style={{ color: 'red' }}>Error: {error}</p>;
+
+  // Define default labels for the last 7 days
+  const today = new Date();
+  const last7Days = Array.from({ length: 7 }, (_, i) => {
+    const date = new Date();
+    date.setDate(today.getDate() - (6 - i));
+    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  });
+
+  // Ensure data fills in empty days with zero calories
+  const mappedData = last7Days.map(date => {
+    const entry = data.find(item => new Date(item.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) === date);
+    return entry ? entry.calories : 0;
+  });
+
+  // Chart data
   const chartData = {
-    labels: data.map(item => item.date),
+    labels: last7Days,
     datasets: [
       {
-        data: data.map(item => item.value),
+        label: 'Calories',
+        data: mappedData,
         fill: false,
         borderColor: 'rgb(255, 255, 255)',
-        tension: 0.1
+        tension: 0.1,
       }
     ]
   };
@@ -41,29 +78,28 @@ export function Progress() {
           weight: 'bold',
           lineHeight: 1.5,
         },
-        color: '#FFFFFF',  // Title text color (black)
+        color: '#FFFFFF',
       },
       tooltip: {
-        titleColor: '#FFFFFF',  // Tooltip title color (black)
-        bodyColor: '#FFFFFF',   // Tooltip body text color (black)
+        titleColor: '#FFFFFF',
+        bodyColor: '#FFFFFF',
       },
       legend: {
-        display: false,  // Hides the entire legend, including the toggle
-        labels: {
-          display: false,  // Ensures that no labels are shown, even if display is true
-        }
+        display: false,
       }
     },
     scales: {
       x: {
         ticks: {
-          color: '#FFFFFF',  // X-axis labels text color (black)
+          color: '#FFFFFF',
         }
       },
       y: {
         ticks: {
-          color: '#FFFFFF',  // Y-axis labels text color (black)
-        }
+          color: '#FFFFFF',
+        },
+        suggestedMin: 0, // Start Y-axis at 0
+        suggestedMax: 2500, // Set an upper bound for visibility
       }
     },
   };
@@ -72,7 +108,7 @@ export function Progress() {
     <main>
       <section id="graph-section">
         <div className="canvas-container">
-            <Line data={chartData} options={chartOptions}/>
+          <Line data={chartData} options={chartOptions} />
         </div>
       </section>
     </main>
