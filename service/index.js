@@ -91,6 +91,41 @@ const verifyAuth = async (req, res, next) => {
   }
 };
 
+apiRouter.post('/calories', verifyAuth, async (req, res) => {
+  const user = await findUser('token', req.cookies[authCookieName]);
+  if (!user) {
+    return res.status(401).json({ msg: 'Unauthorized' });
+  }
+
+  const { date, calories } = req.body;
+  if (!date || !calories) {
+    return res.status(400).json({ msg: 'Date and calories are required' });
+  }
+
+  try {
+    await DB.addOrUpdateCalorieEntry(user.email, date, calories);
+    res.json({ msg: 'Calorie data saved successfully' });
+  } catch (error) {
+    console.error('Error saving calorie data:', error);
+    res.status(500).json({ msg: 'Internal server error' });
+  }
+});
+
+apiRouter.get('/calories/weekly', verifyAuth, async (req, res) => {
+  const user = await findUser('token', req.cookies[authCookieName]);
+  if (!user) {
+    return res.status(401).json({ msg: 'Unauthorized' });
+  }
+
+  try {
+    const weeklyData = await DB.getWeeklyCalories(user.email);
+    res.json(weeklyData);
+  } catch (error) {
+    console.error('Error fetching weekly calorie data:', error);
+    res.status(500).json({ msg: 'Internal server error' });
+  }
+});
+
 async function createUser(email, password) {
     const passwordHash = await bcrypt.hash(password, 10);
   
