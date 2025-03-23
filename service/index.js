@@ -1,3 +1,5 @@
+require('dotenv').config(); // Load .env variables
+
 const cookieParser = require('cookie-parser');
 const bcrypt = require('bcrypt');
 const express = require('express');
@@ -6,16 +8,12 @@ const uuid = require('uuid');
 const app = express();
 const DB = require('./database.js')
 
-require('dotenv').config(); // Load .env variables
-
 const authCookieName = 'token';
 
 app.use(cors({
   origin: ['http://localhost:5173', 'https://startup.calorietracker.click']
 }));
 
-// The users are saved in memory and disappear whenever the service is restarted.
-let users = [];
 
 // The service port. In production the front-end code is statically hosted by the service on the same port.
 const port = process.argv.length > 2 ? process.argv[2] : 4000;
