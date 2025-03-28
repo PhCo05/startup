@@ -14,26 +14,28 @@ export function Progress() {
     async function fetchCalorieData() {
       try {
         const response = await fetch('http://localhost:4000/api/calories/weekly', { 
-        method: 'GET',
-        credentials: 'include' });
+          method: 'GET',
+          credentials: 'include' 
+        });
         if (!response.ok) {
           throw new Error('Failed to fetch calorie data');
         }
         const fetchedData = await response.json();
-
+  
         // Ensure data is sorted by date
         const sortedData = fetchedData.sort((a, b) => new Date(a.date) - new Date(b.date));
-
-        setData(sortedData);
+  
+        setData(sortedData); // Update your state with the fetched data
       } catch (err) {
         setError(err.message);
       } finally {
         setLoading(false);
       }
     }
-
+  
     fetchCalorieData();
   }, []);
+  
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p style={{ color: 'red' }}>Error: {error}</p>;
@@ -48,8 +50,10 @@ export function Progress() {
 
   // Ensure data fills in empty days with zero calories
   const mappedData = last7Days.map(date => {
-    const entry = data.find(item => new Date(item.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) === date);
-    return entry ? entry.calories : 0;
+    const entry = data.find(item => 
+      new Date(item.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) === date
+    );
+    return entry ? entry.calories : 0; // Directly using backend total calories
   });
 
   // Chart data
@@ -99,7 +103,7 @@ export function Progress() {
           color: '#FFFFFF',
         },
         suggestedMin: 0, // Start Y-axis at 0
-        suggestedMax: 2500, // Set an upper bound for visibility
+        suggestedMax: 3500, // Set an upper bound for visibility
       }
     },
   };

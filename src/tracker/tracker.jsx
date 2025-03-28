@@ -38,31 +38,46 @@ export function Tracker() {
         handleCloseGoalModal(); // Close modal after saving the goal
     }
 
-    const handleAddEntry = () => {
-        if (foodName && calories) {
+    const handleAddEntry = async () => {
+      if (foodName && calories) {
           const calorieInt = parseInt(calories, 10);
           if (!isNaN(calorieInt)) {
-            const newEntry = { foodName, calories: calorieInt };
-    
-            // Get existing food entries from localStorage
-            const existingEntries = JSON.parse(localStorage.getItem('foodEntries')) || [];
-            const updatedEntries = [...existingEntries, newEntry];
-    
-            // Save the updated entries back to localStorage
-            localStorage.setItem('foodEntries', JSON.stringify(updatedEntries));
-    
-            // Update total calories
-            const newTotalCalories = totalCalories + calorieInt;
-            setTotalCalories(newTotalCalories);
-            localStorage.setItem('totalCalories', newTotalCalories);
-            handleCloseCalModal();
+              const newEntry = { foodName, calories: calorieInt, date: new Date().toISOString().split('T')[0] };
+  
+              // Update local storage
+              const existingEntries = JSON.parse(localStorage.getItem('foodEntries')) || [];
+              const updatedEntries = [...existingEntries, newEntry];
+              localStorage.setItem('foodEntries', JSON.stringify(updatedEntries));
+  
+              // Update total calories
+              const newTotalCalories = totalCalories + calorieInt;
+              setTotalCalories(newTotalCalories);
+              localStorage.setItem('totalCalories', newTotalCalories);
+  
+              // Send data to backend
+              try {
+                  const response = await fetch('http://localhost:4000/api/calories', {
+                      method: 'POST',
+                      credentials: 'include',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify(newEntry),
+                  });
+  
+                  if (!response.ok) {
+                      throw new Error('Failed to log food entry');
+                  }
+              } catch (error) {
+                  console.error('Error logging food entry:', error);
+              }
+  
+              handleCloseCalModal();
           } else {
-            alert('Please enter a valid number for calories.');
+              alert('Please enter a valid number for calories.');
           }
-        } else {
+      } else {
           alert('Please fill in both fields.');
-        }
-      };
+      }
+  };
 
     useEffect(() => {
         const newProgress = Math.min((totalCalories / calorieGoal) * 100, 100);

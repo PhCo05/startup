@@ -38,4 +38,4 @@ export function Log() {
       </div>
     </main>
   );
-}
+} 

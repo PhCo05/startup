@@ -38,7 +38,9 @@ const calCollection = db.collection('calories');
   async function addOrUpdateCalorieEntry(userId, date, calories) {
     await calCollection.updateOne(
       { userId: userId, date: date }, // Find entry for this user and date
-      { $set: { userId: userId, date: date, calories: calories } }, // Update or insert
+      { 
+        $inc: { calories: calories } // Increment calories for that day
+      },
       { upsert: true } // Create new entry if not found
     );
   }
@@ -47,14 +49,40 @@ const calCollection = db.collection('calories');
     return calCollection.findOne({ userId: userId, date: date });
   }
   
-  async function getWeeklyCalories(userId) {
-    const sevenDaysAgo = new Date();
-    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 6); // Get last 7 days
+  async function getWeeklyCalories(email) {
+    const startDate = new Date();
+    startDate.setDate(startDate.getDate() - 6); // Get past 7 days
+    startDate.setHours(0, 0, 0, 0); // Set to midnight to ignore time
   
-    return calCollection
-      .find({ userId: userId, date: { $gte: sevenDaysAgo.toISOString().split('T')[0] } })
-      .sort({ date: 1 })
-      .toArray();
+    const formattedStartDate = startDate.toISOString().split('T')[0]; // Get just the date part
+  
+    console.log('Formatted Start Date for the past week:', formattedStartDate); // Log formatted start date
+  
+    const aggregatedData = await db.collection('calories').aggregate([
+      { 
+        $match: { 
+          email, 
+          date: { $gte: new Date(formattedStartDate) } // Filter for dates in the last 7 days
+        }
+      },
+      { 
+        $group: { 
+          _id: "$date", 
+          totalCalories: { $sum: "$calories" } // Sum calories per day
+        }
+      },
+      { 
+        $sort: { _id: 1 } // Sort by date (ascending)
+      }
+    ]).toArray();
+  
+    console.log('Aggregated Weekly Calorie Data:', aggregatedData); // Log aggregated data
+  
+    return aggregatedData;
+  }
+
+  async function addFoodEntry(userId, foodName, calories, date) {
+    await calCollection.insertOne({ userId, foodName, calories, date });
   }
 
   module.exports = {
@@ -65,4 +93,5 @@ const calCollection = db.collection('calories');
     addOrUpdateCalorieEntry,
     getCalorieEntry,
     getWeeklyCalories,
+    addFoodEntry,
   };

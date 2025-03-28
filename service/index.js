@@ -95,20 +95,20 @@ const verifyAuth = async (req, res, next) => {
 apiRouter.post('/calories', verifyAuth, async (req, res) => {
   const user = await findUser('token', req.cookies[authCookieName]);
   if (!user) {
-    return res.status(401).json({ msg: 'Unauthorized' });
+      return res.status(401).json({ msg: 'Unauthorized' });
   }
 
-  const { date, calories } = req.body;
-  if (!date || !calories) {
-    return res.status(400).json({ msg: 'Date and calories are required' });
+  const { foodName, calories, date } = req.body;
+  if (!foodName || !calories || !date) {
+      return res.status(400).json({ msg: 'Food name, calories, and date are required' });
   }
 
   try {
-    await DB.addOrUpdateCalorieEntry(user.email, date, calories);
-    res.json({ msg: 'Calorie data saved successfully' });
+      await DB.addFoodEntry(user.email, foodName, calories, date);
+      res.json({ msg: 'Food entry logged successfully' });
   } catch (error) {
-    console.error('Error saving calorie data:', error);
-    res.status(500).json({ msg: 'Internal server error' });
+      console.error('Error saving food entry:', error);
+      res.status(500).json({ msg: 'Internal server error' });
   }
 });
 
@@ -120,7 +120,7 @@ apiRouter.get('/calories/weekly', verifyAuth, async (req, res) => {
 
   try {
     const weeklyData = await DB.getWeeklyCalories(user.email);
-    res.json(weeklyData);
+    res.json(weeklyData.map(entry => ({ date: entry._id, calories: entry.totalCalories })));
   } catch (error) {
     console.error('Error fetching weekly calorie data:', error);
     res.status(500).json({ msg: 'Internal server error' });
