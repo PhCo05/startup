@@ -13,7 +13,7 @@ export function Progress() {
   useEffect(() => {
     async function fetchCalorieData() {
       try {
-        const response = await fetch('http://localhost:4000/api/calories/weekly', { 
+        const response = await fetch('https://startup.calorietracker.click/api/calories/weekly', { 
           method: 'GET',
           credentials: 'include' 
         });

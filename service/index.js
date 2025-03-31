@@ -155,6 +155,7 @@ function setAuthCookie(res, authToken) {
       secure: true,
       httpOnly: true,
       sameSite: 'strict',
+      path: '/',
     });
 }
   
