@@ -98,13 +98,13 @@ apiRouter.post('/calories', verifyAuth, async (req, res) => {
       return res.status(401).json({ msg: 'Unauthorized' });
   }
 
-  const { foodName, calories, date } = req.body;
-  if (!foodName || !calories || !date) {
-      return res.status(400).json({ msg: 'Food name, calories, and date are required' });
-  }
+  const { foodName, calories } = req.body;
+if (!foodName || !calories) {
+  return res.status(400).json({ msg: 'Food name and calories are required' });
+}
 
   try {
-      await DB.addFoodEntry(user.email, foodName, calories, date);
+      await DB.addFoodEntry(user.email, foodName, calories);
       res.json({ msg: 'Food entry logged successfully' });
   } catch (error) {
       console.error('Error saving food entry:', error);
@@ -126,6 +126,22 @@ apiRouter.get('/calories/weekly', verifyAuth, async (req, res) => {
     res.status(500).json({ msg: 'Internal server error' });
   }
 });
+
+apiRouter.get('/calories/today', verifyAuth, async (req, res) => {
+  const user = await findUser('token', req.cookies[authCookieName]);
+  if (!user) {
+    return res.status(401).json({ msg: 'Unauthorized' });
+  }
+
+  try {
+    const entries = await DB.getTodayCalories(user.email); // your existing DB method
+    res.json(entries);
+  } catch (error) {
+    console.error('Error fetching today\'s calories:', error);
+    res.status(500).json({ msg: 'Internal server error' });
+  }
+});
+
 
 async function createUser(email, password) {
     const passwordHash = await bcrypt.hash(password, 10);

@@ -4,20 +4,65 @@ import './log.css';
 export function Log() {
   const [foodEntries, setFoodEntries] = useState([]);
   const [totalCalories, setTotalCalories] = useState(0);
-  const [date, setDate] = useState(new Date().toDateString());
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  const fetchTodayEntries = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch('https://startup.calorietracker.click/api/calories/today', {
+        method: 'GET',
+        credentials: 'include',
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch entries');
+      }
+
+      const data = await response.json();
+
+      setFoodEntries(data);
+      const total = data.reduce((sum, entry) => sum + entry.calories, 0);
+      setTotalCalories(total);
+    } catch (err) {
+      console.error('Fetch error:', err);
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const entries = JSON.parse(localStorage.getItem('foodEntries')) || [];
-    setFoodEntries(entries);
+    fetchTodayEntries();
 
-    const total = entries.reduce((acc, entry) => acc + entry.calories, 0);
-    setTotalCalories(total);
-  }, []); // Only run on initial render to load from localStorage
+    // Listen for caloriesUpdated event and refresh log
+    const handleCaloriesUpdated = () => {
+      fetchTodayEntries();
+    };
+
+    window.addEventListener('caloriesUpdated', handleCaloriesUpdated);
+
+    return () => {
+      window.removeEventListener('caloriesUpdated', handleCaloriesUpdated);
+    };
+  }, []);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p style={{ color: 'red' }}>Error: {error}</p>;
 
   return (
     <main>
       <div className="container mt-4" id="daily-log">
-        <h4>Daily Log - <span id="log-date">{date}</span></h4>
+        <h4>
+          Daily Log -{' '}
+          <span id="log-date">
+            {new Date().toLocaleDateString('en-US', {
+              month: 'short',
+              day: 'numeric',
+              year: 'numeric',
+            })}
+          </span>
+        </h4>
 
         <div className="total-calories">
           <strong>Total Calories:</strong> <span id="daily-total">{totalCalories}</span> cal
@@ -38,4 +83,4 @@ export function Log() {
       </div>
     </main>
   );
-} 
+}
