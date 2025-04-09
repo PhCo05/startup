@@ -94,23 +94,43 @@ const verifyAuth = async (req, res, next) => {
   }
 };
 
+const { getSocketServer } = require('./peerProxy');
+
 apiRouter.post('/calories', verifyAuth, async (req, res) => {
   const user = await findUser('token', req.cookies[authCookieName]);
   if (!user) {
-      return res.status(401).json({ msg: 'Unauthorized' });
+    return res.status(401).json({ msg: 'Unauthorized' });
   }
 
   const { foodName, calories } = req.body;
-if (!foodName || !calories) {
-  return res.status(400).json({ msg: 'Food name and calories are required' });
-}
+  if (!foodName || !calories) {
+    return res.status(400).json({ msg: 'Food name and calories are required' });
+  }
 
   try {
-      await DB.addFoodEntry(user.email, foodName, calories);
-      res.json({ msg: 'Food entry logged successfully' });
+    await DB.addFoodEntry(user.email, foodName, calories);
+
+    // ✅ WebSocket broadcast here
+    const socketServer = getSocketServer();
+    const message = JSON.stringify({
+      type: 'activity',
+      name: user.email, // or use user.name if available
+      foodName,
+      calories,
+    });
+
+    console.log("📡 Broadcasting WebSocket message:", message);
+
+    socketServer.clients.forEach((client) => {
+      if (client.readyState === 1) {
+        client.send(message);
+      }
+    });
+
+    res.json({ msg: 'Food entry logged successfully' });
   } catch (error) {
-      console.error('Error saving food entry:', error);
-      res.status(500).json({ msg: 'Internal server error' });
+    console.error('Error saving food entry:', error);
+    res.status(500).json({ msg: 'Internal server error' });
   }
 });
 

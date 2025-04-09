@@ -103,6 +103,7 @@ export function Tracker() {
         const socket = new WebSocket(`${protocol}://${window.location.host}`);
       
         socket.onmessage = (event) => {
+            console.log("📨 Received WebSocket message:", event.data);
           const message = JSON.parse(event.data);
           if (message.type === 'activity') {
             const { name, foodName, calories } = message;

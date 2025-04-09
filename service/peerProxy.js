@@ -33,4 +33,8 @@ function peerProxy(httpServer) {
   }, 10000);
 }
 
-module.exports = { peerProxy };
+function getSocketServer() {
+    return socketServer;
+  }
+  
+  module.exports = { peerProxy, getSocketServer };
