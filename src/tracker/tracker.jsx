@@ -99,15 +99,28 @@ export function Tracker() {
     }, [totalCalories, calorieGoal]);
 
     useEffect(() => {
-        setInterval(() => {
-            const names = ['Zach', 'Chris', 'Dave'];
-            const msgs = ['added calories', 'reached goal'];
-            const randomName = names[Math.floor(Math.random() * names.length)];
-            const randomMsg = msgs[Math.floor(Math.random() * msgs.length)];
-            const newMsg = `${randomName} ${randomMsg}`;
+        const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
+        const socket = new WebSocket(`${protocol}://${window.location.host}`);
+      
+        socket.onmessage = (event) => {
+          const message = JSON.parse(event.data);
+          if (message.type === 'activity') {
+            const { name, foodName, calories } = message;
+            const newMsg = `${name} logged ${foodName} (${calories} cal)`;
             setMsg(newMsg);
-        }, 5000);
-    });
+      
+            // Clear the message after 5 seconds
+            setTimeout(() => setMsg('...listening'), 5000);
+          }
+        };
+      
+        socket.onerror = (err) => {
+          console.error('WebSocket error:', err);
+        };
+      
+        return () => socket.close();
+      }, []);
+      
 
     return (
         <main>
