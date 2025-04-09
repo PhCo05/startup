@@ -13,34 +13,35 @@ export function Progress() {
   useEffect(() => {
     async function fetchCalorieData() {
       try {
-        const response = await fetch('https://startup.calorietracker.click/api/calories/weekly', { 
+        const response = await fetch('https://startup.calorietracker.click/api/calories/weekly', {
           method: 'GET',
-          credentials: 'include' 
+          credentials: 'include'
         });
+
         if (!response.ok) {
           throw new Error('Failed to fetch calorie data');
         }
+
         const fetchedData = await response.json();
-  
-        // Ensure data is sorted by date
+
+        // Sort the data by date (just in case)
         const sortedData = fetchedData.sort((a, b) => new Date(a.date) - new Date(b.date));
-  
-        setData(sortedData); // Update your state with the fetched data
+
+        setData(sortedData);
       } catch (err) {
         setError(err.message);
       } finally {
         setLoading(false);
       }
     }
-  
+
     fetchCalorieData();
   }, []);
-  
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p style={{ color: 'red' }}>Error: {error}</p>;
 
-  // Define default labels for the last 7 days
+  // Format last 7 days as display labels
   const today = new Date();
   const last7Days = Array.from({ length: 7 }, (_, i) => {
     const date = new Date();
@@ -48,15 +49,18 @@ export function Progress() {
     return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
   });
 
-  // Ensure data fills in empty days with zero calories
-  const mappedData = last7Days.map(date => {
-    const entry = data.find(item => 
-      new Date(item.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) === date
-    );
-    return entry ? entry.calories : 0; // Directly using backend total calories
-  });
+  // Convert backend data into a Map for fast lookup
+  const dataMap = new Map(
+    data.map(entry => [
+      new Date(entry.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+      entry.calories
+    ])
+  );
 
-  // Chart data
+  // Match data to labels and fill in any missing days with 0
+  const mappedData = last7Days.map(date => dataMap.get(date) || 0);
+
+  // Chart setup
   const chartData = {
     labels: last7Days,
     datasets: [
@@ -92,6 +96,10 @@ export function Progress() {
         display: false,
       }
     },
+    animation: {
+      duration: 800,
+      easing: 'easeOutQuart',
+    },
     scales: {
       x: {
         ticks: {
@@ -102,8 +110,8 @@ export function Progress() {
         ticks: {
           color: '#FFFFFF',
         },
-        suggestedMin: 0, // Start Y-axis at 0
-        suggestedMax: 3500, // Set an upper bound for visibility
+        suggestedMin: 0,
+        suggestedMax: 3500,
       }
     },
   };

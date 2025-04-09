@@ -63,45 +63,27 @@ const calCollection = db.collection('calories');
   
   async function getWeeklyCalories(email) {
     const startDate = new Date();
-    startDate.setDate(startDate.getDate() - 6); // Get past 7 days
-    startDate.setHours(0, 0, 0, 0); // Set to midnight to ignore time
-
-    // Get end of the day timestamp for the start date
-    const endDate = new Date(startDate);
-    endDate.setDate(startDate.getDate() + 6); // Set it to 6 days after the start date
-    endDate.setHours(23, 59, 59, 999); // Set time to end of the day
-
-    const formattedStartDate = startDate.toISOString();
-    const formattedEndDate = endDate.toISOString();
-
-    console.log('Formatted Start Date for the past week:', formattedStartDate); // Log formatted start date
-    console.log('Formatted End Date for the past week:', formattedEndDate); // Log formatted end date
-
-    const aggregatedData = await db.collection('calories').aggregate([
-        { 
-            $match: { 
-                email, 
-                date: { 
-                    $gte: new Date(formattedStartDate), 
-                    $lte: new Date(formattedEndDate) // Match only the dates in the last 7 days
-                }
-            }
-        },
-        { 
-            $group: { 
-                _id: "$date", 
-                totalCalories: { $sum: "$calories" } // Sum calories per day
-            }
-        },
-        { 
-            $sort: { _id: 1 } // Sort by date (ascending)
+    startDate.setDate(startDate.getDate() - 6); // Include today and past 6 days
+    startDate.setHours(0, 0, 0, 0);
+  
+    return await calCollection.aggregate([
+      {
+        $match: {
+          userId: email,
+          timestamp: { $gte: startDate }
         }
+      },
+      {
+        $group: {
+          _id: {
+            $dateToString: { format: "%Y-%m-%d", date: "$timestamp" }
+          },
+          totalCalories: { $sum: "$calories" }
+        }
+      },
+      { $sort: { _id: 1 } }
     ]).toArray();
-
-    console.log('Aggregated Weekly Calorie Data:', aggregatedData); // Log aggregated data
-
-    return aggregatedData;
-}
+  }
 
 
 async function addFoodEntry(userId, foodName, calories) {
